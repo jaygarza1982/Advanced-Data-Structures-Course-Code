@@ -53,7 +53,7 @@ C_Numbers::~C_Numbers(){
 **    Side Effects: None
 */
 void C_Numbers::printArray(void){
-
+    this->p_printArray();
 }
 
 /*
@@ -64,7 +64,7 @@ void C_Numbers::printArray(void){
 **    Side Effects: Sets the numArr to file contents
 */
 void C_Numbers::readFile(char fileName[100]){
-
+    this->p_readFile(fileName);
 }
 
 /*
@@ -75,7 +75,9 @@ void C_Numbers::readFile(char fileName[100]){
 **    Side Effects: None
 */
 void C_Numbers::p_printArray(void){
-
+    for (int numArrayIndex = 0; numArrayIndex < this->p_arraySize; numArrayIndex++) {
+        cout << this->p_numArray[numArrayIndex] << endl;
+    }
 }
 
 /*
@@ -86,7 +88,24 @@ void C_Numbers::p_printArray(void){
 **    Side Effects: None
 */
 void C_Numbers::p_readFile(char fileName[100]){
-    
+    ifstream fileStream(fileName);
+
+    if (fileStream.is_open()) {
+        fileStream >> this->p_arraySize;
+
+        //Create numArray
+        p_numArray = new int[this->p_arraySize];
+
+        //Loop through array size and fill array
+        for (size_t numArrayIndex = 0; numArrayIndex < this->p_arraySize; numArrayIndex++) {
+            fileStream >> p_numArray[numArrayIndex];
+        }
+
+        fileStream.close();
+    }
+    else {
+        //TODO: Throw exception I think
+    }
 }
 
 
@@ -101,7 +120,8 @@ int main(int argc, char *argv[]){
 
     C_Numbers cNumbers;
     
-    cNumbers.readFile("input.dat");
+    char *filename = "input.dat";
+    cNumbers.readFile(filename);
     cNumbers.printArray();
     
     return 0;

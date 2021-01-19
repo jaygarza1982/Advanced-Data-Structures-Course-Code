@@ -108,6 +108,46 @@ void C_Numbers::p_readFile(char fileName[100]){
     }
 }
 
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Calls the private sort array function
+**    Function Output: None
+**    Side Effects: Sorts the p_numArray
+*/
+void C_Numbers::sortArray() {
+    this->p_sortArray();
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Sorts the p_numArray variable
+**    Function Output: None
+**    Side Effects: p_numArray will be sorted after call
+*/
+void C_Numbers::p_sortArray() {
+    //Create an array the size of largest integer input
+    int maxSize = 10001;
+
+    int countSortBucket[maxSize] = {0};
+
+    //Count occurrences of numbers
+    for (int numArrayIndex = 0; numArrayIndex < this->p_arraySize; numArrayIndex++) {
+        countSortBucket[this->p_numArray[numArrayIndex]]++;
+    }
+
+    //To keep track of current index of numArray
+    int numArrayIndex = 0;
+    
+    //For each index of bucket, if it is not zero, fill the p_numArray
+    for (int bucketIndex = 0; bucketIndex < maxSize; bucketIndex++) {
+        for (int occurrencesCount = 0; occurrencesCount < countSortBucket[bucketIndex]; occurrencesCount++) {
+            p_numArray[numArrayIndex] = bucketIndex;
+            numArrayIndex++;
+        }
+    }
+}
 
 /*
 **    Author: Jacob Garza
@@ -122,6 +162,7 @@ int main(int argc, char *argv[]){
     
     char *filename = "input.dat";
     cNumbers.readFile(filename);
+    cNumbers.sortArray();
     cNumbers.printArray();
     
     return 0;

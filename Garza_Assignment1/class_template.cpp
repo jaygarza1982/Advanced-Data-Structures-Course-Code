@@ -160,7 +160,7 @@ int main(int argc, char *argv[]){
 
     C_Numbers cNumbers;
     
-    char *filename = "input.dat";
+    char filename[] = "input.dat";
     cNumbers.readFile(filename);
     cNumbers.sortArray();
     cNumbers.printArray();

@@ -75,8 +75,20 @@ void C_Numbers::readFile(char fileName[100]){
 **    Side Effects: None
 */
 void C_Numbers::p_printArray(void){
-    for (int numArrayIndex = 0; numArrayIndex < this->p_arraySize; numArrayIndex++) {
-        cout << this->p_numArray[numArrayIndex] << endl;
+    try {
+        if (this->p_numArray == NULL) {
+            throw MyException("Number array not intialized.");
+        }
+
+        for (int numArrayIndex = 0; numArrayIndex < this->p_arraySize; numArrayIndex++) {
+            cout << this->p_numArray[numArrayIndex] << endl;
+        }
+    }
+    catch (MyException &myEx) {
+        cout << myEx.what() << endl;
+    }
+    catch (exception &e) {
+        cout << e.what() << endl;
     }
 }
 
@@ -90,21 +102,40 @@ void C_Numbers::p_printArray(void){
 void C_Numbers::p_readFile(char fileName[100]){
     ifstream fileStream(fileName);
 
-    if (fileStream.is_open()) {
-        fileStream >> this->p_arraySize;
+    try {
+        if (fileStream.is_open()) {
+            //Read input size from file
+            fileStream >> this->p_arraySize;
 
-        //Create numArray
-        p_numArray = new int[this->p_arraySize];
+            //Ensure that the file is smaller than our allocated array for input
+            if (this->p_arraySize >= 100) {
+                throw MyException("File input size too large!");
+            }
 
-        //Loop through array size and fill array
-        for (size_t numArrayIndex = 0; numArrayIndex < this->p_arraySize; numArrayIndex++) {
-            fileStream >> p_numArray[numArrayIndex];
+            //Create numArray
+            p_numArray = new int[this->p_arraySize];
+
+            //Loop through array size and fill array
+            for (size_t numArrayIndex = 0; numArrayIndex < this->p_arraySize; numArrayIndex++) {
+                fileStream >> p_numArray[numArrayIndex];
+            }
+
         }
-
-        fileStream.close();
+        else {
+            //TODO: Throw exception I think
+            throw MyException("File could not open!");
+        }
     }
-    else {
-        //TODO: Throw exception I think
+    catch (MyException &myEx) {
+        cout << myEx.what() << endl;
+    }
+    catch (exception &e) {
+        cout << e.what() << endl;
+    }
+
+    //Close file even if exception happens after opening
+    if (fileStream.is_open()) {
+        fileStream.close();
     }
 }
 
@@ -133,19 +164,31 @@ void C_Numbers::p_sortArray() {
     int countSortBucket[maxSize] = {0};
 
     //Count occurrences of numbers
-    for (int numArrayIndex = 0; numArrayIndex < this->p_arraySize; numArrayIndex++) {
-        countSortBucket[this->p_numArray[numArrayIndex]]++;
-    }
-
-    //To keep track of current index of numArray
-    int numArrayIndex = 0;
-    
-    //For each index of bucket, if it is not zero, fill the p_numArray
-    for (int bucketIndex = 0; bucketIndex < maxSize; bucketIndex++) {
-        for (int occurrencesCount = 0; occurrencesCount < countSortBucket[bucketIndex]; occurrencesCount++) {
-            p_numArray[numArrayIndex] = bucketIndex;
-            numArrayIndex++;
+    try {
+        if (this->p_numArray == NULL) {
+            throw MyException("Number array not initalized.");
         }
+
+        for (int numArrayIndex = 0; numArrayIndex < this->p_arraySize; numArrayIndex++) {
+            countSortBucket[this->p_numArray[numArrayIndex]]++;
+        }
+
+        //To keep track of current index of numArray
+        int numArrayIndex = 0;
+        
+        //For each index of bucket, if it is not zero, fill the p_numArray
+        for (int bucketIndex = 0; bucketIndex < maxSize; bucketIndex++) {
+            for (int occurrencesCount = 0; occurrencesCount < countSortBucket[bucketIndex]; occurrencesCount++) {
+                p_numArray[numArrayIndex] = bucketIndex;
+                numArrayIndex++;
+            }
+        }
+    } catch (MyException &myEx) {
+        cout << myEx.what() << endl;
+    }
+    catch (exception &e) {
+        cout << "Could not sort integers." << endl;
+        cout << e.what() << endl;
     }
 }
 

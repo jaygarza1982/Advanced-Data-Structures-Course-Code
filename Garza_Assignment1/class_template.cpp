@@ -9,7 +9,7 @@ class C_Numbers{
         
         C_Numbers();
         ~C_Numbers();
-        void readFile(char[100]);
+        void readFile(char[101]);
         void printArray();
         void sortArray();
 
@@ -17,7 +17,7 @@ class C_Numbers{
         int *p_numArray;
         int p_arraySize;
 
-        void p_readFile(char[100]);
+        void p_readFile(char[101]);
         void p_printArray();
         void p_sortArray();
 };
@@ -81,7 +81,7 @@ void C_Numbers::p_printArray(void){
         }
 
         for (int numArrayIndex = 0; numArrayIndex < this->p_arraySize; numArrayIndex++) {
-            cout << this->p_numArray[numArrayIndex] << endl;
+            cout << this->p_numArray[numArrayIndex] << " ";
         }
     }
     catch (MyException &myEx) {
@@ -108,7 +108,7 @@ void C_Numbers::p_readFile(char fileName[100]){
             fileStream >> this->p_arraySize;
 
             //Ensure that the file is smaller than our allocated array for input
-            if (this->p_arraySize >= 100) {
+            if (this->p_arraySize > 100) {
                 throw MyException("File input size too large!");
             }
 
@@ -207,6 +207,8 @@ int main(int argc, char *argv[]){
     cNumbers.readFile(filename);
     cNumbers.sortArray();
     cNumbers.printArray();
+
+    cout << endl;
     
     return 0;
 }

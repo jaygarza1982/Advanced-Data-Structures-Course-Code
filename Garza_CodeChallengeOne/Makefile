@@ -1,5 +1,9 @@
+INCLUDE_DIRS := ./
+CC 		:= g++
+CFLAGS 		 := -I$(INCLUDE_DIRS)
+
 make: class_template.cpp customErrorClass.cpp
-	g++ -g -o assignment1 class_template.cpp customErrorClass.cpp
+	$(CC) -g -o Garza_CodeChallengeOne class_template.cpp customErrorClass.cpp $(CFLAGS)
 
 clean:
-	rm assignment1
+	rm Garza_CodeChallengeOne

@@ -1,10 +1,34 @@
 #include "C_BST.h"
 #include <stddef.h>
+#include <iomanip>
+#include <iostream>
 
 using namespace std;
 
 C_BST::C_BST()
 {
+    //Define our root node when constructing a new BST
+    this->root = NULL;
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Inserts a node into the BST at the root
+**    Function Output: None
+**    Side Effects: Inserts a node into the BST from the root
+*/
+void C_BST::insertValue(int data) {
+    //If our root is null, create a new node
+    if (this->root == NULL) {
+        this->root = new S_NODE;
+        this->root->data = data;
+        this->root->left = this->root->right = NULL;
+    }
+    //If root is not null, recursively add nodes
+    else {
+        this->insertValue(data, this->root);
+    }
 }
 
 /*
@@ -54,6 +78,76 @@ S_NODE* C_BST::findNode(S_NODE* node, int data)
     
     //If none of the above cases meet, we have found our node!
     return node;
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Calls the helper get height function
+**    Function Output: Height of the BST
+**    Side Effects: None
+*/
+int C_BST::getHeight() {
+    //Get the height of the tree
+    int privateHeight = this->p_getHeight(this->root);
+
+    //If we returned something less than 0 (if our root node is null), return 0
+    //If we did not return something less than 0, return the height found
+    return  privateHeight < 0 ? 0 : privateHeight;
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Gets the height of the BST
+**    Function Output: The height of the BST
+**    Side Effects: None
+*/
+int C_BST::p_getHeight(S_NODE *root) {
+    //Do not add 1, minus 1 since we went a layer too deep
+    //Or a layer that does not exist because root is null
+    if (root == NULL) return -1;
+
+    //Go down each sub tree
+    int leftTreeHeight = this->p_getHeight(root->left);
+    int rightTreeHeight = this->p_getHeight(root->right);
+
+    //Take which ever one is greater
+    if (leftTreeHeight > rightTreeHeight) return 1 + leftTreeHeight;
+
+    return 1 + rightTreeHeight;
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Calls the print helper function to print BST
+**    Function Output: None (void, but prints to screen)
+**    Side Effects: None, prints the BST to the screen, does not write to variables
+*/
+void C_BST::printTree() {
+    p_formattedPrint(this->root, 4);
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Prints the BST in a formatted mannor
+**    Function Output: None (void, but prints to screen)
+**    Side Effects: Prints the binary to screen, does not write to any variables
+*/
+void C_BST::p_formattedPrint(S_NODE *node, int indent) {
+    if (NULL == node) return;
+
+    this->p_formattedPrint(node->left, indent+4);
+
+    if (indent) {
+        cout << setw(indent) << " ";
+    }
+
+    cout << node->data << endl;
+
+    this->p_formattedPrint(node->right, indent+4);
 }
 
 C_BST::~C_BST()

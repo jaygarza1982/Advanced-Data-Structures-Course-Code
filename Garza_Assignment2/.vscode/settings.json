@@ -6,6 +6,10 @@
         "string": "cpp",
         "vector": "cpp",
         "ostream": "cpp",
-        "string_view": "cpp"
-    }
+        "string_view": "cpp",
+        "array": "cpp"
+    },
+    "cSpell.words": [
+        "stoi"
+    ]
 }

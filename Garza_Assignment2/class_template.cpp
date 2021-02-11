@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "customErrorClass.h"
+#include "C_BST.h"
 
 using namespace std;
 
@@ -23,10 +24,18 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
+    //Make BST object
+    C_BST tree;
+
+    //Read values into BST from file
     while (getline(inputFile, line))
     {
-        cout << line << endl;
+        // cout << line << endl;
+        //Insert values into BST, convert them to integers first
+        tree.insertValue(stoi(line));
     }
+
+    tree.printTree();
 
     return 0;
 }

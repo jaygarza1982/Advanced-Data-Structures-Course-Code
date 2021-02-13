@@ -37,5 +37,11 @@ int main(int argc, char *argv[])
 
     tree.printTree();
 
+    cout << "-------------------------------------" << endl;
+
+    tree.sortTree();
+
+    tree.printTree();
+
     return 0;
 }

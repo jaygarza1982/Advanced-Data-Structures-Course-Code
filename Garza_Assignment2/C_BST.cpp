@@ -150,6 +150,101 @@ void C_BST::p_formattedPrint(S_NODE *node, int indent) {
     this->p_formattedPrint(node->right, indent+4);
 }
 
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Rotates a given node to the left
+**    Function Output: The new node that is rotated
+**    Side Effects: Changes the given nodes pointers and nodes around it
+*/
+S_NODE *C_BST::p_rotateLeft(S_NODE *node) {
+    S_NODE *rightNode;
+    S_NODE *rightNodeLeft;
+
+    //If the given node or the given nodes right is null, stop
+    //We cannot continue if either of these are true
+    if ((node == NULL) || (node->right == NULL))
+    {
+        return node;
+    }
+
+    //Assign right node to point to given nodes right child
+    rightNode = node->right;
+    rightNodeLeft = rightNode->left;
+
+    rightNode->left = node;
+    node->right = rightNodeLeft;
+
+    return rightNode;
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Rotates a given node to the right
+**    Function Output: The new rotated node
+**    Side Effects: Changes the given nodes pointers and nodes around it
+*/
+S_NODE *C_BST::p_rotateRight(S_NODE *node) {
+    S_NODE *leftNode;
+    S_NODE *leftNodeRight;
+
+    //If the given node or the given nodes left is null, stop
+    //We cannot continue if either of these are true
+    if ((node == NULL) || (node->left == NULL))
+    {
+        return node;
+    }
+
+    //Assign right node to point to given nodes right child
+    leftNode = node->left;
+    leftNodeRight = leftNode->right;
+
+    leftNode->right = node;
+    node->left = leftNodeRight;
+
+    return leftNode;
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Creates the vine for the DSW algorithm
+**    Function Output: Pointer to the root of the starting node
+**    Side Effects: "Shifts" all nodes to the right, creating a right leaning tree
+*/
+S_NODE* C_BST::p_createVine(S_NODE *node) {
+
+    S_NODE *pointer;
+    S_NODE *right = new S_NODE;
+
+    //right->left = NULL;
+    right->right = node;
+
+    pointer = right;
+    while (pointer->right != NULL) {
+        if (pointer->right->left == NULL) {
+            pointer = pointer->right;
+        }
+        else {
+            pointer->right = this->p_rotateRight(pointer->right);
+        }
+    }
+
+    return right->right;
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Balances the tree by creating a vine, and doing rotations
+**    Function Output: void
+**    Side Effects: Balances the BST starting with the root node
+*/
+void C_BST::sortTree() {
+    this->root = this->p_createVine(this->root);
+}
+
 C_BST::~C_BST()
 {
 }

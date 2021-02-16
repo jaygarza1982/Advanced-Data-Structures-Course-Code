@@ -14,6 +14,7 @@ class C_BST
         S_NODE *p_rotateLeft(S_NODE *node);
         S_NODE *p_rotateRight(S_NODE *node);
         S_NODE *p_createVine(S_NODE *node);
+        S_NODE *p_initialRotations(S_NODE *node, int count);
 
     public:
         C_BST();

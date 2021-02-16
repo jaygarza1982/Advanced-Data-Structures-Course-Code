@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <iomanip>
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -237,12 +238,55 @@ S_NODE* C_BST::p_createVine(S_NODE *node) {
 /*
 **    Author: Jacob Garza
 **    Function Purpose: 
+**        Does step 2 of the DSW algorithm. The initial rotations needed to balance given
+          a calculated count of how many are needed.
+**    Function Output: A "pseudo" root node of where we left off
+**    Side Effects: Does rotations where needed leaving the tree modified
+*/
+S_NODE *C_BST::p_initialRotations(S_NODE* node, int rotations) {
+    S_NODE *crawler = node;
+
+    //While we still have rotations left
+    while (rotations)
+    {
+        //Rotate left and crawl to the right as needed
+        crawler->right = this->p_rotateLeft(crawler->right);
+        crawler = crawler->right;
+
+        --rotations;
+    }
+
+    return node;
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
 **        Balances the tree by creating a vine, and doing rotations
 **    Function Output: void
 **    Side Effects: Balances the BST starting with the root node
 */
 void C_BST::sortTree() {
     this->root = this->p_createVine(this->root);
+
+    int log2Value;
+    int initialLeftRotations;
+    int height = this->getHeight();
+
+    //Floored since log2Value is an integer
+    log2Value = log2(height + 1);
+
+    //Step 2 of DSW
+    initialLeftRotations = height + 1 - (pow(2, log2Value));
+    this->root = this->p_initialRotations(this->root, initialLeftRotations);
+
+    //Final steps in DSW
+    height -= initialLeftRotations;
+    while (height > 1)
+    {
+        height /= 2;
+        this->root = p_initialRotations(this->root, height);
+    }
 }
 
 C_BST::~C_BST()

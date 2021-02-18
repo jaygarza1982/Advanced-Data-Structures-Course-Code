@@ -43,5 +43,13 @@ int main(int argc, char *argv[])
 
     tree.printTree();
 
+    //Uncomment this code to test deleting the tree
+    //Should not print anything for printing the tree
+    // cout << "------- deleted ----------" << endl;
+    
+    // tree.deleteTree();
+
+    // tree.printTree();
+
     return 0;
 }

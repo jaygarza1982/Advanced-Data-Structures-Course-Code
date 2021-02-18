@@ -289,6 +289,39 @@ void C_BST::sortTree() {
     }
 }
 
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Deletes a given node from the tree recursively
+**    Function Output: None
+**    Side Effects: Deletes all nodes below a given node
+*/
+void C_BST::p_deleteNode(S_NODE *node) {
+    //If the node we were given is null, stop
+    if (node == NULL) return;
+
+    //If it is not null, go to its children and delete them
+    p_deleteNode(node->right);
+    p_deleteNode(node->left);
+
+    //Delete the given node after going to its children
+    delete node;
+}
+
+/*
+**    Author: Jacob Garza
+**    Function Purpose: 
+**        Deletes all nodes within the tree starting with the root node
+**    Function Output: None
+**    Side Effects: Root is set back to a new node and all nodes beneath the old root are deleted
+*/
+void C_BST::deleteTree() {
+    this->p_deleteNode(this->root);
+
+    //Assign null to the root for future construction
+    this->root = NULL;
+}
+
 C_BST::~C_BST()
 {
 }

@@ -11,6 +11,7 @@ class C_BST
         S_NODE *root;
         int p_getHeight(S_NODE *root);
         void p_formattedPrint(S_NODE *node, int indent);
+        void p_deleteNode(S_NODE *node);
         S_NODE *p_rotateLeft(S_NODE *node);
         S_NODE *p_rotateRight(S_NODE *node);
         S_NODE *p_createVine(S_NODE *node);
@@ -24,5 +25,6 @@ class C_BST
         int getHeight();
         void printTree();
         void sortTree();
+        void deleteTree();
         ~C_BST();
 };

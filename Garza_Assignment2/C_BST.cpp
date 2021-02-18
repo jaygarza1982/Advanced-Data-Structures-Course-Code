@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <iostream>
 #include <math.h>
+#include "customErrorClass.h"
 
 using namespace std;
 
@@ -70,15 +71,22 @@ S_NODE* C_BST::insertValue(int data, S_NODE* node)
 */
 S_NODE* C_BST::findNode(S_NODE* node, int data)
 {
-    //If the node we are on is null, return it
-    if(node == NULL) return NULL;
+    try {
+        //If the node we are on is null, throw an exception
+        if(node == NULL) throw MyException("Cannot find a NULL node.");
 
-    //Search the tree accordingly
-    else if(data < node->data) return findNode(node->left, data);
-    else if(data > node->data) return findNode(node->right, data);
-    
-    //If none of the above cases meet, we have found our node!
-    return node;
+        //Search the tree accordingly
+        else if(data < node->data) return findNode(node->left, data);
+        else if(data > node->data) return findNode(node->right, data);
+        
+        //If none of the above cases meet, we have found our node!
+        return node;
+    } catch (MyException &myEx) {
+        cout << myEx.what() << endl;
+    }
+    catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 }
 
 /*
@@ -89,12 +97,21 @@ S_NODE* C_BST::findNode(S_NODE* node, int data)
 **    Side Effects: None
 */
 int C_BST::getHeight() {
-    //Get the height of the tree
-    int privateHeight = this->p_getHeight(this->root);
+    try {
+        if (this->root == NULL) throw MyException("Cannot get height of an empty tree.");
 
-    //If we returned something less than 0 (if our root node is null), return 0
-    //If we did not return something less than 0, return the height found
-    return  privateHeight < 0 ? 0 : privateHeight;
+        //Get the height of the tree
+        int privateHeight = this->p_getHeight(this->root);
+
+        //If we returned something less than 0 (if our root node is null), return 0
+        //If we did not return something less than 0, return the height found
+        return  privateHeight < 0 ? 0 : privateHeight;
+    } catch (MyException &myEx) {
+        cout << myEx.what() << endl;
+    }
+    catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 }
 
 /*
@@ -127,7 +144,16 @@ int C_BST::p_getHeight(S_NODE *root) {
 **    Side Effects: None, prints the BST to the screen, does not write to variables
 */
 void C_BST::printTree() {
-    p_formattedPrint(this->root, 4);
+    try {
+        if (this->root == NULL) throw MyException("Cannot print an empty tree.");
+
+        p_formattedPrint(this->root, 4);
+    } catch (MyException &myEx) {
+        cout << myEx.what() << endl;
+    }
+    catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 }
 
 /*
@@ -267,25 +293,37 @@ S_NODE *C_BST::p_initialRotations(S_NODE* node, int rotations) {
 **    Side Effects: Balances the BST starting with the root node
 */
 void C_BST::sortTree() {
-    this->root = this->p_createVine(this->root);
-
-    int log2Value;
-    int initialLeftRotations;
-    int height = this->getHeight();
-
-    //Floored since log2Value is an integer
-    log2Value = log2(height + 1);
-
-    //Step 2 of DSW
-    initialLeftRotations = height + 1 - (pow(2, log2Value));
-    this->root = this->p_initialRotations(this->root, initialLeftRotations);
-
-    //Final steps in DSW
-    height -= initialLeftRotations;
-    while (height > 1)
+    try
     {
-        height /= 2;
-        this->root = p_initialRotations(this->root, height);
+        if (this->root == NULL) throw MyException("Cannot balance an empty tree.");
+
+        this->root = this->p_createVine(this->root);
+
+        int log2Value;
+        int initialLeftRotations;
+        int height = this->getHeight();
+
+        //Floored since log2Value is an integer
+        log2Value = log2(height + 1);
+
+        //Step 2 of DSW
+        initialLeftRotations = height + 1 - (pow(2, log2Value));
+        this->root = this->p_initialRotations(this->root, initialLeftRotations);
+
+        //Final steps in DSW
+        height -= initialLeftRotations;
+        while (height > 1)
+        {
+            height /= 2;
+            this->root = p_initialRotations(this->root, height);
+        }
+    }
+    catch (MyException &myEx)
+    {
+        cout << myEx.what() << endl;
+    }
+    catch (exception &ex) {
+        cout << ex.what() << endl;
     }
 }
 
@@ -316,10 +354,19 @@ void C_BST::p_deleteNode(S_NODE *node) {
 **    Side Effects: Root is set back to a new node and all nodes beneath the old root are deleted
 */
 void C_BST::deleteTree() {
-    this->p_deleteNode(this->root);
+    try {
+        if (this->root == NULL) throw MyException("Tree is already empty!");
+        
+        this->p_deleteNode(this->root);
 
-    //Assign null to the root for future construction
-    this->root = NULL;
+        //Assign null to the root for future construction
+        this->root = NULL;
+    } catch (MyException &myEx) {
+        cout << myEx.what() << endl;
+    }
+    catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 }
 
 C_BST::~C_BST()

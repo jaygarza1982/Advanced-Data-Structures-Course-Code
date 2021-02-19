@@ -42,24 +42,33 @@ void C_BST::insertValue(int data) {
 */
 S_NODE* C_BST::insertValue(int data, S_NODE* node)
 {
-    // If the node we are at is null, we have reached where we should insert
-    //So we create a new node and insert into the tree
-    if(node == NULL)
-    {
-        node = new S_NODE;
-        node->data = data;
-        node->left = node->right = NULL;
-    }
-    // Go left
-    else if(data < node->data) {
-        node->left = insertValue(data, node->left);
-    }
-    // Go right
-    else if(data > node->data) {
-        node->right = insertValue(data, node->right);
-    }
+    try {
+        if (data < 0) throw MyException("Cannot insert negative values into tree.");
+        
+        // If the node we are at is null, we have reached where we should insert
+        //So we create a new node and insert into the tree
+        if(node == NULL)
+        {
+            node = new S_NODE;
+            node->data = data;
+            node->left = node->right = NULL;
+        }
+        // Go left
+        else if(data < node->data) {
+            node->left = insertValue(data, node->left);
+        }
+        // Go right
+        else if(data > node->data) {
+            node->right = insertValue(data, node->right);
+        }
 
-    return node;
+        return node;
+    } catch (MyException &myEx) {
+        cout << myEx.what() << endl;
+    }
+    catch (exception &ex) {
+        cout << ex.what() << endl;
+    }
 }
 
 /*
